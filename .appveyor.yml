@@ -1,0 +1,19 @@
+version: "{build}"
+clone_folder: C:\gopath\src\github.com\smola\go-globalenv
+environment:
+  GOPATH: C:\gopath
+image:
+  - Visual Studio 2015
+  - Visual Studio 2017
+platform:
+  - x64
+  - x32
+matrix:
+  fast_finish: true
+build: off
+test_script:
+  - set PATH=%GOPATH%\bin;C:\go\bin;%PATH%
+  - go get -t ./...
+  - go build ./cmd/globalenv/...
+  - go test -v ./...
+deploy: off
