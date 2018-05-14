@@ -1,6 +1,7 @@
 package globalenv
 
 import (
+	"runtime"
 	"strings"
 )
 
@@ -58,9 +59,16 @@ func (h Handler) Getenv(key string) string {
 			continue
 		}
 
-		if kv[0] == key {
-			return kv[1]
+		if runtime.GOOS == "windows" {
+			if strings.ToLower(kv[0]) == strings.ToLower(key) {
+				return kv[1]
+			}
+		} else {
+			if kv[0] == key {
+				return kv[1]
+			}
 		}
+
 	}
 
 	return ""
