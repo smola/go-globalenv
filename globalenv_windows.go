@@ -8,17 +8,19 @@ import (
 	"golang.org/x/sys/windows/registry"
 )
 
-func supported() bool {
+func (h Handler) supported() bool {
 	return true
 }
 
-func environ() []string {
+func (h Handler) environ() []string {
 	envMap, _ := getEnv(registry.LOCAL_MACHINE, `System\CurrentControlSet\Control\Session Manager\Environment`)
 
-	cuEnvMap, _ := getEnv(registry.CURRENT_USER, `Environment`)
+	if !h.SystemWide {
+		cuEnvMap, _ := getEnv(registry.CURRENT_USER, `Environment`)
 
-	for k, v := range cuEnvMap {
-		envMap[k] = v
+		for k, v := range cuEnvMap {
+			envMap[k] = v
+		}
 	}
 
 	var env []string

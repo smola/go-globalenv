@@ -7,13 +7,13 @@ import (
 	"strings"
 )
 
-func supported() bool {
-	_, err := execEnv()
+func (h Handler) supported() bool {
+	_, err := h.execEnv()
 	return err == nil
 }
 
-func environ() []string {
-	out, err := execEnv()
+func (h Handler) environ() []string {
+	out, err := h.execEnv()
 	if err != nil {
 		return nil
 	}
@@ -30,8 +30,9 @@ func environ() []string {
 	return env
 }
 
-func execEnv() ([]byte, error) {
-	cmd := exec.Command("/usr/bin/env", "-", "/bin/sh", "-c",
-		". /etc/profile && env")
+func (h Handler) execEnv() ([]byte, error) {
+	cmd := exec.Command(
+		"/usr/bin/env", "-", h.FallbackShell,
+		"-c", ". /etc/profile && env")
 	return cmd.CombinedOutput()
 }
