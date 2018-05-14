@@ -33,6 +33,6 @@ func (h Handler) environ() []string {
 func (h Handler) execEnv() ([]byte, error) {
 	cmd := exec.Command(
 		"/usr/bin/env", "-", h.FallbackShell,
-		"-c", ". /etc/profile && env")
+		"-c", "if test -f /etc/profile ; then . /etc/profile ; fi ; env")
 	return cmd.CombinedOutput()
 }
